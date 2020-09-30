@@ -25,8 +25,8 @@
               "apps/ng-test/src/favicon.ico",
               "apps/ng-test/src/assets"
             ],
-            "styles": ["apps/ng-test/src/styles.scss"],
-            "scripts": []
+            "styles": ["apps/ng-test/src/styles.scss","dist/ui/theme.css"],
+            "scripts": ["dist/ui/polyfills.js","dist/ui/main.js"]
           },
           "configurations": {
             "production": {
@@ -62,7 +62,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng-test:build"
+            "browserTarget": "ng-test:build",
+            "port": "4201"
           },
           "configurations": {
             "production": {
@@ -119,6 +120,61 @@
             "tsConfig": ["apps/ng-test-e2e/tsconfig.e2e.json"],
             "exclude": ["**/node_modules/**", "!apps/ng-test-e2e/**/*"]
           }
+        }
+      }
+    },
+    "core": {
+      "projectType": "library",
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
+      "prefix": "ui",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:build",
+          "options": {
+            "outputPath": "dist/ui",
+            "index": "libs/core/src/lib/index.html",
+            "main": "libs/core/src/lib/elements.ts",
+            "polyfills": "libs/core/src/lib/polyfills.ts",
+            "tsConfig": "libs/core/tsconfig.lib.json",
+            "styles": [
+              {
+                "input": "libs/core/src/lib/theme.scss",
+                "bundleName": "theme"
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "none",
+              "sourceMap": false,
+              "extractCss": true
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "tsConfig": [
+              "libs/core/tsconfig.lib.json",
+              "libs/core/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/core/**/*"],
+            "linter": "eslint"
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
         }
       }
     }

@@ -28,6 +28,9 @@
     "ng-test-e2e": {
       "tags": [],
       "implicitDependencies": ["ng-test"]
+    },
+    "core": {
+      "tags": []
     }
   }
 }
